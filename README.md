@@ -67,6 +67,14 @@ Répond `503` tant que la création authentifiée de colis n'est pas activée.
 
 Les endpoints de lecture ne renvoient que les champs nécessaires aux annonces publiques, sans identifiant ni profil d'utilisateur. Les endpoints POST répondent `503 Service Unavailable` tant que l'authentification, les contrôles d'accès, la limitation de débit et la protection anti-abus ne sont pas en place. Les formulaires de publication restent également désactivés.
 
+### Assistant, suggestions et suivi
+
+- `/assistant` fournit un assistant d'information via l'API OpenAI côté serveur. Configurez `OPENAI_API_KEY` dans les variables secrètes Render; `AI_ASSISTANT_ENABLED` reste désactivé par défaut. Les messages sont transmis à OpenAI, donc l'interface demande de ne saisir aucune donnée personnelle ou de colis. Avant activation publique, remplacer la limite mémoire indicative par minute par une limitation distribuée et ajouter les contrôles anti-abus adaptés.
+- `/trajets` propose des correspondances calculées à partir des annonces réelles `OPEN` et de la capacité; les annonces de démonstration sont exclues. Une correspondance n'est ni une réservation ni une garantie.
+- `/suivi` lit les événements d'un colis avec un code de suivi opaque. La migration ajoute le code et l'historique des étapes. L'écriture d'événements n'est pas exposée tant que l'authentification et l'autorisation des rôles opérateur ne sont pas en place; aucun GPS temps réel n'est collecté.
+
+Ces fonctionnalités ne rendent pas le service prêt aux transactions. N'activez pas l'assistant dans un déploiement public avant d'avoir mis en place une limitation de débit distribuée.
+
 ## Structure
 
 ```text

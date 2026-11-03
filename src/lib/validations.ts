@@ -33,3 +33,21 @@ export const shipmentSchema = z.object({
   message: "Le départ et la destination doivent être différents.",
   path: ["destination"],
 });
+
+export const matchingQuerySchema = z.object({
+  origin: city,
+  destination: city,
+  weightKg: z.coerce.number().positive().max(100),
+});
+
+export const assistantMessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().trim().min(1).max(1200),
+});
+
+export const assistantRequestSchema = z.object({
+  messages: z.array(assistantMessageSchema).min(1).max(8)
+    .refine((messages) => messages[messages.length - 1]?.role === "user", {
+      message: "Le dernier message doit venir de l’utilisateur.",
+    }),
+});

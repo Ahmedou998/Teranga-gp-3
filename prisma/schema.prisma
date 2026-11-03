@@ -110,12 +110,26 @@ model Shipment {
   desiredDate     DateTime?
   budgetXof       Int?
   status          ShipmentStatus @default(SEARCHING)
+  trackingCode    String         @unique @default(dbgenerated("('trk_'::text || replace(gen_random_uuid()::text, '-'::text, ''::text))"))
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   bookings        Booking[]
+  trackingEvents  ShipmentTrackingEvent[]
 
   @@index([origin, destination, desiredDate, status])
   @@index([senderId, createdAt])
+}
+
+model ShipmentTrackingEvent {
+  id          String         @id @default(cuid())
+  shipmentId  String
+  shipment    Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  status      ShipmentStatus
+  location    String?
+  note        String?
+  createdAt   DateTime       @default(now())
+
+  @@index([shipmentId, createdAt])
 }
 
 model Booking {
