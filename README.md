@@ -112,6 +112,8 @@ render.yaml
 5. Laisser Render fournir `DATABASE_URL` depuis la base PostgreSQL liée.
 6. Lancer le déploiement et vérifier `/api/health`. Une base vide est initialisée automatiquement au démarrage avec `prisma migrate deploy`.
 
+Pour déclencher manuellement un déploiement depuis GitHub Actions, créer dans les paramètres du service Render un deploy hook, l’enregistrer dans le dépôt GitHub sous **Settings → Secrets and variables → Actions** avec le nom `RENDER_DEPLOY_HOOK`, puis lancer **Actions → Deploy to Render → Run workflow**. Ne jamais publier ni transmettre l’URL du hook.
+
 Le site public est disponible après déploiement, mais les créations restent désactivées en production. Les comptes, réservations, contacts et transactions ne sont pas implémentés; ne pas collecter de données personnelles ou de paiement avant l'intégration et l'audit des contrôles listés ci-dessous.
 
 Les migrations sont exécutées au démarrage via `prisma migrate deploy`. Pour une équipe ou une production critique, préférer une étape de release/migration contrôlée et un plan de rollback.
