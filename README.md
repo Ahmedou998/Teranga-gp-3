@@ -137,6 +137,21 @@ Avant d'ouvrir le service au public, implémenter au minimum :
 
 Aucun portefeuille client, séquestre ou paiement n'est implémenté dans cette version.
 
+## Rémunération future de la plateforme
+
+Le modèle envisagé pour rémunérer l’exploitation de Teranga GP est une **commission sur les transports effectivement réalisés**, et non sur les annonces, demandes, mises en relation ou réservations annulées. Aucun frais n’est actuellement calculé, facturé ou versé.
+
+Avant le lancement commercial, définir et afficher clairement :
+
+- le taux de commission et son assiette (prix convenu du transport, hors ou frais inclus) ;
+- qui paie la commission : expéditeur, voyageur, ou partage explicite entre les deux ;
+- la règle d’arrondi en XOF et le traitement des frais du prestataire de paiement, remboursements et litiges ;
+- le bénéficiaire légal des recettes de la plateforme et, séparément, les modalités de rémunération de son créateur.
+
+**Recommandation technique :** figer un instantané de la règle de commission au moment où une réservation est acceptée, puis enregistrer en XOF le montant brut, la commission de la plateforme, la rémunération nette du voyageur, les frais du prestataire et les remboursements. Calculer et comptabiliser la commission de façon idempotente uniquement après confirmation fiable de la livraison et du paiement; mettre le versement en attente pendant un litige et annuler ou rembourser selon une règle publiée. Le créateur ne doit pas recevoir un accès direct aux fonds des clients : son éventuelle rémunération relève d’un versement distinct, documenté et conforme aux obligations juridiques, fiscales et comptables de l’entité qui exploite la plateforme.
+
+L’implémentation nécessitera notamment un parcours de réservation authentifié, une politique de commission versionnée, un registre comptable immuable, un prestataire de paiement et de versement adapté aux pays desservis, des webhooks signés/idempotents, ainsi que des contrôles d’accès et des rapprochements comptables. La commission doit rester désactivée tant que ces choix et contrôles ne sont pas validés. Ce modèle est une préparation produit, pas un avis juridique ni une promesse de revenu.
+
 ## Portée internationale et limites actuelles
 
 Les champs `origin` et `destination` acceptent du texte libre (ville et pays) et la recherche compare ces champs sans imposer de liste de villes.
