@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Bot, LoaderCircle, Sparkles } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -12,6 +13,11 @@ export function AssistantClient() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const prompts = [
+    "Comment décrire mon colis sans oublier les informations utiles ?",
+    "Comment savoir si un trajet correspond à mon itinéraire et à mon poids ?",
+    "Quelles sont les étapes du suivi d’un colis ?",
+  ];
 
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,6 +59,21 @@ export function AssistantClient() {
           </div>
         ))}
         {loading && <div className="chat-message assistant"><span className="chat-avatar"><Bot size={17}/></span><p><LoaderCircle size={16} className="spin"/> Je prépare une réponse…</p></div>}
+      </div>
+      <div className="assistant-tools">
+        <p>Questions fréquentes</p>
+        <div className="assistant-prompts">
+          {prompts.map((prompt) => (
+            <button key={prompt} type="button" onClick={() => setInput(prompt)} disabled={loading}>
+              {prompt}
+            </button>
+          ))}
+        </div>
+        <nav className="assistant-shortcuts" aria-label="Actions Teranga GP">
+          <Link href="/publier/colis">Décrire un colis</Link>
+          <Link href="/trajets">Chercher un trajet</Link>
+          <Link href="/suivi">Consulter un suivi</Link>
+        </nav>
       </div>
       {error && <p className="form-error" role="alert">{error}</p>}
       <form className="assistant-form" onSubmit={sendMessage}>

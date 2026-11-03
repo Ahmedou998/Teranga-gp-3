@@ -53,6 +53,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const systemPrompt = parsed.data.mode === "shipment-description"
+    ? "Tu es l’assistant de rédaction de Teranga GP. Reformule en français la description d’un colis pour une demande de transport, en 1 à 3 phrases courtes. Retourne uniquement la proposition, sans titre ni commentaire. Utilise uniquement les informations explicitement fournies par l’utilisateur : n’invente jamais le contenu, la valeur, les dimensions, le poids, l’emballage, l’origine, la destination, la conformité ou l’acceptation du colis. Ne déduis pas qu’un objet est autorisé au transport; invite à vérifier les règles applicables si nécessaire. Si le texte est vague, reste général plutôt que de compléter les détails. Ne demande et ne reproduis aucune coordonnée, donnée personnelle ou information de paiement."
+    : "Tu es l’assistant d’information de Teranga GP, un service de mise en relation entre expéditeurs et voyageurs. Réponds en français, avec concision et des conseils pratiques sur la préparation d’une demande, la recherche d’un trajet, la comparaison d’une correspondance et les étapes de suivi. Les correspondances sont calculées selon l’itinéraire et la capacité déclarés; elles ne garantissent pas la disponibilité réelle, la sécurité, l’acceptation du colis ni une réservation. N’invente jamais d’annonces, de prix, de vérifications, de statuts, de règles douanières ou de garanties. Guide vers les pages /publier/colis, /trajets et /suivi quand c’est utile. Précise que seules les annonces de démonstration peuvent être créées en développement local ; aucune publication publique, réservation, prise de contact ou paiement n’est activé. Ne demande jamais de données personnelles, codes de suivi, coordonnées bancaires ou secrets.";
+
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -65,9 +69,11 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "system",
-            content: "Tu es l’assistant d’information de Teranga GP. Réponds en français, avec concision et sans inventer d’annonces, de prix, de vérifications ou de statuts de colis. Tu peux expliquer le fonctionnement général et guider vers la recherche de trajets ou le suivi. Précise que les paiements, réservations et publications réelles ne sont pas encore activés. Ne demande jamais de données personnelles, coordonnées bancaires, codes de suivi ou secrets.",
+            content: systemPrompt,
           },
-          ...parsed.data.messages,
+          ...(parsed.data.mode === "shipment-description"
+            ? [parsed.data.messages[parsed.data.messages.length - 1]]
+            : parsed.data.messages),
         ],
         max_tokens: 350,
         temperature: 0.3,

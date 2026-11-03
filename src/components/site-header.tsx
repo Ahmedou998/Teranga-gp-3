@@ -20,6 +20,7 @@ export function SiteHeader() {
           <Link className="nav-link" href="/#fonctionnement" onClick={closeMenu}>Comment ça marche</Link>
           <Link className="nav-link" href="/#avantages" onClick={closeMenu}>Pourquoi Teranga GP</Link>
           <Link className="nav-link" href="/trajets" onClick={closeMenu}>Trouver un trajet</Link>
+          <Link className="nav-link" href="/colis" onClick={closeMenu}>Demandes de colis</Link>
           <Link className="nav-link" href="/assistant" onClick={closeMenu}>Assistant IA</Link>
           <Link className="nav-link" href="/suivi" onClick={closeMenu}>Suivi colis</Link>
         </nav>

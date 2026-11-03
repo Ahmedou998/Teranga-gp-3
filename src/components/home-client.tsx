@@ -9,7 +9,7 @@ export function HomeClient() {
   const [destination, setDestination] = useState("Paris, France");
   return (
     <>
-      <section style={{ padding: "76px 0 64px", overflow: "hidden" }}>
+      <section className="home-hero" style={{ padding: "76px 0 64px", overflow: "hidden" }}>
         <div className="container hero-layout" style={{ display: "grid", alignItems: "center", gap: 54 }}>
           <div className="reveal">
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 13px", borderRadius: 99, background: "#eaf3e9", color: "#087f5b", fontSize: 12, fontWeight: 800, letterSpacing: ".04em" }}>
@@ -32,30 +32,30 @@ export function HomeClient() {
           </div>
           <div style={{ position: "relative", minHeight: 440 }} className="hero-art float reveal reveal-delay">
             <div className="soft-grid" style={{ position: "absolute", inset: "10px 0 0 20px", borderRadius: 36, backgroundColor: "#eaf0e7" }}/>
-            <div className="surface" style={{ position: "absolute", top: 45, left: 10, right: 25, padding: 24, transform: "rotate(-2deg)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
-                <div><div style={{ color: "#718078", fontSize: 12, fontWeight: 700 }}>TRAJET DISPONIBLE</div><strong style={{ fontSize: 20 }}>Dakar, Sénégal <span style={{ color: "#087f5b" }}>↔</span> Paris, France</strong></div>
-                <span style={{ background: "#eaf5e9", color: "#087f5b", borderRadius: 99, padding: "7px 10px", fontSize: 11, fontWeight: 800 }}>OUVERT</span>
+            <div className="surface hero-demo-card" style={{ position: "absolute", top: 45, left: 10, right: 25, padding: 24, transform: "rotate(-2deg)" }}>
+              <div className="hero-demo-heading" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
+                <div><div className="hero-demo-kicker" style={{ color: "#718078", fontSize: 12, fontWeight: 700 }}>APERÇU DE DÉMONSTRATION</div><strong className="hero-route-title" style={{ fontSize: 20 }}>Dakar, Sénégal <span style={{ color: "#087f5b" }}>↔</span> Paris, France</strong></div>
+                <span className="hero-demo-badge" style={{ background: "#eaf5e9", color: "#087f5b", borderRadius: 99, padding: "7px 10px", fontSize: 11, fontWeight: 800 }}>EXEMPLE</span>
               </div>
-              <div style={{ height: 150, borderRadius: 18, background: "linear-gradient(135deg,#e5efe4,#f5f5e9)", position: "relative", overflow: "hidden", display: "grid", placeItems: "center" }}>
+              <div className="hero-route-art" style={{ height: 150, borderRadius: 18, background: "linear-gradient(135deg,#e5efe4,#f5f5e9)", position: "relative", overflow: "hidden", display: "grid", placeItems: "center" }}>
                 <svg viewBox="0 0 420 150" width="100%" height="100%" aria-label="Illustration stylisée d'un itinéraire">
                   <path d="M0 112 C70 100 72 36 145 58 S250 132 315 70 S370 35 420 44" stroke="#b6cbb5" strokeWidth="2" fill="none" strokeDasharray="5 7"/>
                   <path className="route-line" d="M35 100 C100 80 100 50 160 61 S255 117 310 71 S360 48 390 48" stroke="#087f5b" strokeWidth="3" fill="none" strokeLinecap="round"/>
                   <circle cx="35" cy="100" r="7" fill="#087f5b"/><circle cx="390" cy="48" r="7" fill="#d7f36a" stroke="#087f5b" strokeWidth="3"/>
                   <circle className="route-pulse" cx="35" cy="100" r="15" fill="#087f5b" opacity=".12"/><circle className="route-pulse" cx="390" cy="48" r="15" fill="#087f5b" opacity=".12"/>
-                  <text x="24" y="132" fill="#43554c" fontSize="11">Dakar</text><text x="345" y="26" fill="#43554c" fontSize="11">Saint-Louis</text>
+                  <text x="24" y="132" fill="#43554c" fontSize="11">Dakar</text><text x="365" y="26" fill="#43554c" fontSize="11">Paris</text>
                 </svg>
-                <div style={{ position: "absolute", bottom: 12, right: 12, background: "white", borderRadius: 10, padding: "7px 10px", fontSize: 11, fontWeight: 700 }}>Exemple de liaison internationale</div>
+                <div className="hero-route-caption" style={{ position: "absolute", bottom: 12, right: 12, background: "white", borderRadius: 10, padding: "7px 10px", fontSize: 11, fontWeight: 700 }}>Exemple de liaison internationale</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 18 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#dce9d9", display: "grid", placeItems: "center", fontWeight: 800, color: "#087f5b" }}>MD</div>
-                  <div><strong style={{ fontSize: 13 }}>Moussa D.</strong><div style={{ color: "#78867e", fontSize: 11 }}>Voyageur · profil à vérifier</div></div>
+                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#dce9d9", display: "grid", placeItems: "center", fontWeight: 800, color: "#087f5b" }}>TG</div>
+                  <div><strong style={{ fontSize: 13 }}>Profil fictif</strong><div style={{ color: "#78867e", fontSize: 11 }}>Annonce non vérifiée</div></div>
                 </div>
-                <div style={{ textAlign: "right" }}><strong style={{ fontSize: 20 }}>Devise à définir</strong><div style={{ fontSize: 10, color: "#78867e" }}>prix affiché selon le pays</div></div>
+                <div style={{ textAlign: "right" }}><strong style={{ fontSize: 20 }}>— XOF/kg</strong><div style={{ fontSize: 10, color: "#78867e" }}>prix indicatif à confirmer</div></div>
               </div>
             </div>
-            <div style={{ position: "absolute", bottom: 5, right: 0, background: "#d7f36a", borderRadius: 18, padding: "16px 19px", boxShadow: "0 14px 30px #183b2420" }}>
+            <div className="hero-callout" style={{ position: "absolute", bottom: 5, right: 0, background: "#d7f36a", borderRadius: 18, padding: "16px 19px", boxShadow: "0 14px 30px #183b2420" }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#52632d" }}>UN COLIS, UN BON TRAJET</div><div style={{ fontSize: 18, fontWeight: 800 }}>Simplement. Ensemble.</div>
             </div>
           </div>

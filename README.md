@@ -55,7 +55,7 @@ Filtres optionnels : `origin`, `destination`. Renvoie les trajets ouverts et fut
 
 ### `POST /api/trips`
 
-Répond `503` tant que la création authentifiée de trajets n'est pas activée.
+Crée un trajet seulement si `LOCAL_MVP_ENABLED=true`, hors production, avec une requête de même origine depuis `localhost` ou une adresse loopback.
 
 ### `GET /api/shipments`
 
@@ -63,14 +63,25 @@ Renvoie les demandes au statut `SEARCHING`.
 
 ### `POST /api/shipments`
 
-Répond `503` tant que la création authentifiée de colis n'est pas activée.
+Crée une demande seulement si `LOCAL_MVP_ENABLED=true`, hors production, avec une requête de même origine depuis `localhost` ou une adresse loopback.
 
-Les endpoints de lecture ne renvoient que les champs nécessaires aux annonces publiques, sans identifiant ni profil d'utilisateur. Les endpoints POST répondent `503 Service Unavailable` tant que l'authentification, les contrôles d'accès, la limitation de débit et la protection anti-abus ne sont pas en place. Les formulaires de publication restent également désactivés.
+Le mode local utilise un profil technique partagé, sans compte utilisateur ni données de contact. Les créations sont validées côté serveur. Les formulaires et POST restent désactivés par défaut et ne peuvent pas écrire en production; n’exposez pas une instance de développement à Internet. Les annonces ne sont ni réservables ni vérifiées, et aucune prise de contact ou transaction n’est intégrée.
+
+### Activer le MVP local
+
+1. Copier `.env.example` vers `.env` et laisser `DATABASE_URL` configurée pour PostgreSQL local.
+2. Démarrer la base avec `docker compose up -d db`.
+3. Installer/générer Prisma et appliquer les migrations : `npm install`, `npx prisma generate`, puis `npx prisma migrate dev`.
+4. Définir `LOCAL_MVP_ENABLED="true"` dans `.env`, puis démarrer ou redémarrer `npm run dev`.
+5. Publier une annonce, la retrouver dans `/trajets` ou `/colis`, et vérifier une demande de colis avec le code affiché dans `/suivi`.
+
+Si la variable est absente ou vaut `false`, les formulaires expliquent comment activer le mode local et l’API refuse les écritures. En production, la variable ne les active jamais.
 
 ### Assistant, suggestions et suivi
 
-- `/assistant` fournit un assistant d'information via l'API OpenAI côté serveur. Configurez `OPENAI_API_KEY` dans les variables secrètes Render; `AI_ASSISTANT_ENABLED` reste désactivé par défaut. Les messages sont transmis à OpenAI, donc l'interface demande de ne saisir aucune donnée personnelle ou de colis. Avant activation publique, remplacer la limite mémoire indicative par minute par une limitation distribuée et ajouter les contrôles anti-abus adaptés.
-- `/trajets` propose des correspondances calculées à partir des annonces réelles `OPEN` et de la capacité; les annonces de démonstration sont exclues. Une correspondance n'est ni une réservation ni une garantie.
+- `/assistant` fournit un assistant d'information métier via l'API OpenAI côté serveur. Le formulaire de demande de colis propose aussi une reformulation facultative de la description, sans inventer de détails ni certifier qu'un article peut être transporté. Configurez `OPENAI_API_KEY` dans les variables secrètes; `AI_ASSISTANT_ENABLED` reste désactivé par défaut. Les messages de discussion et la description soumise à reformulation sont transmis à OpenAI; l'interface avertit de ne pas saisir de données personnelles. Avant activation publique, remplacer la limite mémoire indicative par minute par une limitation distribuée et ajouter les contrôles anti-abus adaptés.
+- `/trajets` affiche les trajets locaux ouverts et futurs et propose des correspondances selon l’itinéraire et la capacité. Une correspondance n'est ni une réservation ni une garantie.
+- `/colis` affiche les demandes locales `SEARCHING` sans description ni donnée de contact. Une demande n’est pas une réservation.
 - `/suivi` lit les événements d'un colis avec un code de suivi opaque. La migration ajoute le code et l'historique des étapes. L'écriture d'événements n'est pas exposée tant que l'authentification et l'autorisation des rôles opérateur ne sont pas en place; aucun GPS temps réel n'est collecté.
 
 Ces fonctionnalités ne rendent pas le service prêt aux transactions. N'activez pas l'assistant dans un déploiement public avant d'avoir mis en place une limitation de débit distribuée.
@@ -101,7 +112,7 @@ render.yaml
 5. Laisser Render fournir `DATABASE_URL` depuis la base PostgreSQL liée.
 6. Lancer le déploiement et vérifier `/api/health`. Une base vide est initialisée automatiquement au démarrage avec `prisma migrate deploy`.
 
-Le site public et les annonces de démonstration sont disponibles après déploiement. La publication réelle, les comptes et les transactions restent désactivés; ne pas collecter de données personnelles ou de paiement avant l'intégration et l'audit des contrôles listés ci-dessous.
+Le site public est disponible après déploiement, mais les créations restent désactivées en production. Les comptes, réservations, contacts et transactions ne sont pas implémentés; ne pas collecter de données personnelles ou de paiement avant l'intégration et l'audit des contrôles listés ci-dessous.
 
 Les migrations sont exécutées au démarrage via `prisma migrate deploy`. Pour une équipe ou une production critique, préférer une étape de release/migration contrôlée et un plan de rollback.
 
@@ -128,13 +139,13 @@ Aucun portefeuille client, séquestre ou paiement n'est implémenté dans cette 
 
 ## Portée internationale et limites actuelles
 
-Les champs `origin` et `destination` acceptent déjà du texte libre (ville et pays) et la recherche API compare ces champs sans imposer de liste de villes. L’interface publique a été adaptée pour saisir n’importe quelle ville/pays et présente des exemples Afrique ↔ Europe dans les deux sens.
+Les champs `origin` et `destination` acceptent du texte libre (ville et pays) et la recherche compare ces champs sans imposer de liste de villes.
 
-**La prise en charge commerciale internationale n’est pas encore complète :** le modèle et les validations de prix restent actuellement libellés et structurés en XOF (`pricePerKgXof`, `budgetXof`, `declaredValueXof`). Il faut ajouter une devise ISO 4217 cohérente aux trajets, colis, réservations et paiements, convertir/afficher les montants sans ambiguïté, puis déployer une migration Prisma avant d’accepter des prix dans d’autres devises. Les formulaires de publication restent désactivés jusqu’à l’authentification et à cette intégration. Vérifier aussi les règles douanières, les marchandises autorisées et les obligations de transport propres à chaque pays.
+**La prise en charge commerciale internationale n’est pas encore complète :** le modèle et les validations de prix restent structurés en XOF (`pricePerKgXof`, `budgetXof`, `declaredValueXof`). Il faut ajouter une devise ISO 4217 cohérente aux trajets, colis, réservations et paiements avant d’accepter des prix dans d’autres devises. Vérifier aussi les règles douanières, les marchandises autorisées et les obligations de transport propres à chaque pays.
 
 ## Données de démonstration
 
-Les trajets affichés dans `/trajets` sont des exemples statiques clairement identifiés comme démonstration. Ils ne sont pas réservables et ne représentent pas des utilisateurs réels.
+Les annonces ajoutées en mode local sont des données de démonstration. Elles sont rattachées à un compte technique partagé et ne représentent pas des utilisateurs réels.
 
 ## Qualité
 

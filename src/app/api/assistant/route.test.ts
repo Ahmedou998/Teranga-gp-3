@@ -55,4 +55,33 @@ describe("POST /api/assistant", () => {
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(JSON.stringify(body)).not.toContain("server-secret");
   });
+
+  it("uses only the submitted parcel description for the writing helper", async () => {
+    vi.stubEnv("OPENAI_API_KEY", "server-secret");
+    vi.stubEnv("AI_ASSISTANT_ENABLED", "true");
+    const fetchMock = vi.fn().mockResolvedValue(new Response(
+      JSON.stringify({ choices: [{ message: { content: "Vêtements pliés dans un carton." } }] }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    ));
+    vi.stubGlobal("fetch", fetchMock);
+    const request = new NextRequest("http://localhost/api/assistant", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "shipment-description",
+        messages: [
+          { role: "assistant", content: "Un ancien message de discussion." },
+          { role: "user", content: "Vêtements dans un carton" },
+        ],
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const requestBody = JSON.parse(fetchMock.mock.calls[0][1].body as string) as {
+      messages: Array<{ role: string; content: string }>;
+    };
+    expect(requestBody.messages).toHaveLength(2);
+    expect(requestBody.messages[1]).toEqual({ role: "user", content: "Vêtements dans un carton" });
+    expect(requestBody.messages[0].content).toContain("n’invente jamais");
+  });
 });

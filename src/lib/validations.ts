@@ -34,6 +34,9 @@ export const shipmentSchema = z.object({
   path: ["destination"],
 });
 
+export const localTripSchema = tripSchema.omit({ travelerId: true });
+export const localShipmentSchema = shipmentSchema.omit({ senderId: true });
+
 export const matchingQuerySchema = z.object({
   origin: city,
   destination: city,
@@ -50,4 +53,5 @@ export const assistantRequestSchema = z.object({
     .refine((messages) => messages[messages.length - 1]?.role === "user", {
       message: "Le dernier message doit venir de l’utilisateur.",
     }),
+  mode: z.enum(["general", "shipment-description"]).optional(),
 });
