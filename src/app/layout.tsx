@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Teranga GP — Le colis voyage avec vous",
-  description: "La plateforme collaborative en préparation pour envoyer et transporter des colis entre les pays d’Afrique et d’Europe, dans les deux sens.",
+  description: "Publiez des demandes de colis et des trajets entre le Sénégal et la France.",
   applicationName: "Teranga GP",
 };
 

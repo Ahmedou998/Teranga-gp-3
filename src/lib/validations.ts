@@ -34,8 +34,8 @@ export const shipmentSchema = z.object({
   path: ["destination"],
 });
 
-export const localTripSchema = tripSchema.omit({ travelerId: true });
-export const localShipmentSchema = shipmentSchema.omit({ senderId: true });
+export const tripCreationSchema = tripSchema.omit({ travelerId: true });
+export const shipmentCreationSchema = shipmentSchema.omit({ senderId: true });
 
 export const matchingQuerySchema = z.object({
   origin: city,

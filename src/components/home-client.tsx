@@ -19,7 +19,7 @@ export function HomeClient() {
               Votre colis a déjà <span style={{ color: "#087f5b" }}>un voyage</span> à faire.
             </h1>
             <p style={{ color: "#66766f", fontSize: 18, lineHeight: 1.7, maxWidth: 540, margin: "0 0 28px" }}>
-              Mettez en relation expéditeurs et voyageurs pour faire circuler les colis entre les pays d’Afrique et d’Europe, dans les deux sens.
+              Publiez de vraies annonces de colis ou de trajet entre le Sénégal et la France. Les annonces sont visibles publiquement après confirmation de l’adresse email.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <Link className="btn btn-primary" href="/publier">Envoyer un colis <ArrowUpRight size={17}/></Link>
@@ -34,8 +34,8 @@ export function HomeClient() {
             <div className="soft-grid" style={{ position: "absolute", inset: "10px 0 0 20px", borderRadius: 36, backgroundColor: "#eaf0e7" }}/>
             <div className="surface hero-demo-card" style={{ position: "absolute", top: 45, left: 10, right: 25, padding: 24, transform: "rotate(-2deg)" }}>
               <div className="hero-demo-heading" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
-                <div><div className="hero-demo-kicker" style={{ color: "#718078", fontSize: 12, fontWeight: 700 }}>APERÇU DE DÉMONSTRATION</div><strong className="hero-route-title" style={{ fontSize: 20 }}>Dakar, Sénégal <span style={{ color: "#087f5b" }}>↔</span> Paris, France</strong></div>
-                <span className="hero-demo-badge" style={{ background: "#eaf5e9", color: "#087f5b", borderRadius: 99, padding: "7px 10px", fontSize: 11, fontWeight: 800 }}>EXEMPLE</span>
+                <div><div className="hero-demo-kicker" style={{ color: "#718078", fontSize: 12, fontWeight: 700 }}>ZONE DU PILOTE</div><strong className="hero-route-title" style={{ fontSize: 20 }}>Sénégal <span style={{ color: "#087f5b" }}>↔</span> France</strong></div>
+                <span className="hero-demo-badge" style={{ background: "#eaf5e9", color: "#087f5b", borderRadius: 99, padding: "7px 10px", fontSize: 11, fontWeight: 800 }}>PILOTE</span>
               </div>
               <div className="hero-route-art" style={{ height: 150, borderRadius: 18, background: "linear-gradient(135deg,#e5efe4,#f5f5e9)", position: "relative", overflow: "hidden", display: "grid", placeItems: "center" }}>
                 <svg viewBox="0 0 420 150" width="100%" height="100%" aria-label="Illustration stylisée d'un itinéraire">
@@ -45,14 +45,14 @@ export function HomeClient() {
                   <circle className="route-pulse" cx="35" cy="100" r="15" fill="#087f5b" opacity=".12"/><circle className="route-pulse" cx="390" cy="48" r="15" fill="#087f5b" opacity=".12"/>
                   <text x="24" y="132" fill="#43554c" fontSize="11">Dakar</text><text x="365" y="26" fill="#43554c" fontSize="11">Paris</text>
                 </svg>
-                <div className="hero-route-caption" style={{ position: "absolute", bottom: 12, right: 12, background: "white", borderRadius: 10, padding: "7px 10px", fontSize: 11, fontWeight: 700 }}>Exemple de liaison internationale</div>
+                <div className="hero-route-caption" style={{ position: "absolute", bottom: 12, right: 12, background: "white", borderRadius: 10, padding: "7px 10px", fontSize: 11, fontWeight: 700 }}>Zone couverte par le pilote</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 18 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#dce9d9", display: "grid", placeItems: "center", fontWeight: 800, color: "#087f5b" }}>TG</div>
-                  <div><strong style={{ fontSize: 13 }}>Profil fictif</strong><div style={{ color: "#78867e", fontSize: 11 }}>Annonce non vérifiée</div></div>
+                  <ShieldCheck size={28} color="#087f5b"/>
+                  <div><strong style={{ fontSize: 13 }}>Email confirmé</strong><div style={{ color: "#78867e", fontSize: 11 }}>Identité non vérifiée</div></div>
                 </div>
-                <div style={{ textAlign: "right" }}><strong style={{ fontSize: 20 }}>— XOF/kg</strong><div style={{ fontSize: 10, color: "#78867e" }}>prix indicatif à confirmer</div></div>
+                <div style={{ textAlign: "right" }}><strong style={{ fontSize: 13 }}>Sans paiement</strong><div style={{ fontSize: 10, color: "#78867e" }}>ni réservation intégrée</div></div>
               </div>
             </div>
             <div className="hero-callout" style={{ position: "absolute", bottom: 5, right: 0, background: "#d7f36a", borderRadius: 18, padding: "16px 19px", boxShadow: "0 14px 30px #183b2420" }}>
@@ -72,18 +72,18 @@ export function HomeClient() {
 
       <section id="fonctionnement" style={{ padding: "76px 0", background: "#eef2eb" }}>
         <div className="container">
-          <div style={{ maxWidth: 620, marginBottom: 36 }}><div style={{ color: "#087f5b", fontWeight: 800, fontSize: 12, letterSpacing: ".1em" }}>COMMENT ÇA MARCHE</div><h2 style={{ fontSize: 42, margin: "12px 0" }}>Le bon trajet. La bonne rencontre.</h2><p style={{ color: "#66766f", lineHeight: 1.7 }}>Une expérience conçue pour des itinéraires internationaux, avec départ et arrivée librement renseignés. Les trajets doivent préciser leur ville et leur pays.</p></div>
+          <div style={{ maxWidth: 620, marginBottom: 36 }}><div style={{ color: "#087f5b", fontWeight: 800, fontSize: 12, letterSpacing: ".1em" }}>LE PILOTE</div><h2 style={{ fontSize: 42, margin: "12px 0" }}>Des annonces réelles, sans promesse fictive.</h2><p style={{ color: "#66766f", lineHeight: 1.7 }}>Les membres confirment leur adresse email pour publier. Les annonces sont consultables ; l’identité, les trajets et les colis ne sont pas vérifiés. La prise de contact, les réservations, le paiement et la livraison restent hors service.</p></div>
           <div className="steps-grid" style={{ display: "grid", gap: 18 }}>
-            {[{n:"01",icon:<PackageCheck/>,title:"Décrivez votre colis",desc:"Indiquez le départ, la destination et les informations utiles."},{n:"02",icon:<Waypoints/>,title:"Trouvez un trajet",desc:"Consultez les trajets disponibles et échangez avant de confirmer."},{n:"03",icon:<BadgeCheck/>,title:"Suivez la remise",desc:"Utilisez les étapes de suivi et les preuves de remise prévues."}].map(x=><div className="surface step-card" key={x.n} style={{ padding: 25 }}><div style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}><div style={{ width:46,height:46,borderRadius:15,background:"#eaf5e9",color:"#087f5b",display:"grid",placeItems:"center" }}>{x.icon}</div><span style={{ color:"#a4b0a6",fontWeight:800 }}>{x.n}</span></div><h3 style={{ fontSize:20,margin:"22px 0 8px" }}>{x.title}</h3><p style={{ color:"#718078",fontSize:14,lineHeight:1.7,margin:0 }}>{x.desc}</p></div>)}
+            {[{n:"01",icon:<PackageCheck/>,title:"Créez un compte",desc:"Confirmez votre adresse email et publiez en votre nom."},{n:"02",icon:<Waypoints/>,title:"Publiez une annonce",desc:"Décrivez un trajet ou une demande réelle entre Sénégal et France."},{n:"03",icon:<BadgeCheck/>,title:"Consultez les annonces",desc:"Parcourez les trajets et demandes publiés par les membres."}].map(x=><div className="surface step-card" key={x.n} style={{ padding: 25 }}><div style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}><div style={{ width:46,height:46,borderRadius:15,background:"#eaf5e9",color:"#087f5b",display:"grid",placeItems:"center" }}>{x.icon}</div><span style={{ color:"#a4b0a6",fontWeight:800 }}>{x.n}</span></div><h3 style={{ fontSize:20,margin:"22px 0 8px" }}>{x.title}</h3><p style={{ color:"#718078",fontSize:14,lineHeight:1.7,margin:0 }}>{x.desc}</p></div>)}
           </div>
         </div>
       </section>
 
       <section id="avantages" style={{ padding: "76px 0" }}>
         <div className="container benefits-layout" style={{ display:"grid",gap:54,alignItems:"center" }}>
-          <div><div style={{ color:"#087f5b",fontWeight:800,fontSize:12,letterSpacing:".1em" }}>UNE APPROCHE PLUS HUMAINE</div><h2 style={{ fontSize:42,lineHeight:1.1,margin:"12px 0 18px" }}>La confiance ne se promet pas. Elle se construit.</h2><p style={{ color:"#66766f",lineHeight:1.8 }}>Les profils, les échanges et les étapes de remise doivent permettre à chacun de prendre une décision éclairée. Les vérifications et paiements réels seront activés après intégration de prestataires adaptés.</p></div>
+          <div><div style={{ color:"#087f5b",fontWeight:800,fontSize:12,letterSpacing:".1em" }}>UN PILOTE TRANSPARENT</div><h2 style={{ fontSize:42,lineHeight:1.1,margin:"12px 0 18px" }}>La confiance ne se promet pas. Elle se construit.</h2><p style={{ color:"#66766f",lineHeight:1.8 }}>Une adresse email confirmée est le seul contrôle de compte à ce stade. Aucune vérification d’identité, assurance, prise de contact, réservation ou paiement n’est proposée.</p></div>
           <div className="benefit-grid" style={{ display:"grid",gap:14 }}>
-            {[{icon:<ShieldCheck/>,title:"Des profils lisibles",desc:"Statut de vérification affiché sans ambiguïté."},{icon:<Clock3/>,title:"Des étapes claires",desc:"Un suivi compréhensible à chaque moment."},{icon:<Wallet/>,title:"Prix transparents",desc:"Les conditions doivent être connues avant accord."},{icon:<Truck/>,title:"Trajets utiles",desc:"Valorisez une capacité de transport disponible."}].map(x=><div key={x.title} style={{ background:"#f1f5ef",borderRadius:18,padding:20 }}><div style={{ color:"#087f5b" }}>{x.icon}</div><strong style={{display:"block",margin:"13px 0 6px"}}>{x.title}</strong><span style={{fontSize:12,color:"#718078",lineHeight:1.6}}>{x.desc}</span></div>)}
+            {[{icon:<ShieldCheck/>,title:"Email confirmé",desc:"La confirmation d’email ne vérifie pas l’identité."},{icon:<Clock3/>,title:"Annonces publiques",desc:"Les trajets et demandes réels sont consultables."},{icon:<Wallet/>,title:"Prix indicatifs",desc:"Aucun paiement n’est traité par la plateforme."},{icon:<Truck/>,title:"Pilote limité",desc:"Zone de lancement : Sénégal ↔ France."}].map(x=><div key={x.title} style={{ background:"#f1f5ef",borderRadius:18,padding:20 }}><div style={{ color:"#087f5b" }}>{x.icon}</div><strong style={{display:"block",margin:"13px 0 6px"}}>{x.title}</strong><span style={{fontSize:12,color:"#718078",lineHeight:1.6}}>{x.desc}</span></div>)}
           </div>
         </div>
       </section>
@@ -93,7 +93,7 @@ export function HomeClient() {
           <Link className="btn" style={{ background:"#d7f36a",color:"#123c2e" }} href="/publier">Publier une annonce <ArrowUpRight size={17}/></Link>
         </div>
       </section>
-      <footer style={{ borderTop:"1px solid #e5ebe3",padding:"25px 0",color:"#718078",fontSize:12 }}><div className="container" style={{display:"flex",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><span>© {new Date().getFullYear()} Teranga GP. Concept de marketplace collaborative.</span><span>Une plateforme en construction — transactions réelles non activées.</span></div></footer>
+      <footer style={{ borderTop:"1px solid #e5ebe3",padding:"25px 0",color:"#718078",fontSize:12 }}><div className="container" style={{display:"flex",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><span>© {new Date().getFullYear()} Teranga GP. Pilote d’annonces réelles Sénégal ↔ France.</span><span>Pas de prise de contact, réservation, paiement ou livraison via le site.</span></div></footer>
     </>
   );
 }

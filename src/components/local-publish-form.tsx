@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 
 type Props = {
   kind: "trip" | "shipment";
@@ -119,10 +120,12 @@ export function LocalPublishForm({ kind, enabled }: Props) {
   if (!enabled) {
     return (
       <div className="surface" style={{ padding: 22 }}>
-        <p role="status" style={{ margin: 0, color: "#66766f", lineHeight: 1.7 }}>
-          La publication est désactivée. Pour essayer le MVP, démarrez PostgreSQL et activez{" "}
-          <code>LOCAL_MVP_ENABLED=true</code> dans votre environnement local. Ce mode n’est pas destiné à un déploiement public.
+        <p style={{ margin: "0 0 16px", color: "#66766f", lineHeight: 1.7 }}>
+          Connectez-vous avec une adresse email confirmée pour publier une annonce réelle.
         </p>
+        <Link className="btn btn-primary" href={`/connexion?redirect=%2Fpublier%2F${isTrip ? "trajet" : "colis"}`}>
+          Créer un compte ou se connecter
+        </Link>
       </div>
     );
   }
@@ -207,7 +210,7 @@ export function LocalPublishForm({ kind, enabled }: Props) {
           {loading ? "Enregistrement…" : isTrip ? "Publier le trajet" : "Publier la demande"}
         </button>
         <small style={{ color: "#718078", lineHeight: 1.6 }}>
-          Démonstration locale uniquement : aucune réservation, prise de contact ou transaction n’est créée. N’indiquez pas de données personnelles.
+          Cette annonce est publique. Ne saisissez pas de coordonnées personnelles. Les annonces et profils ne sont pas vérifiés ; aucune réservation ou transaction n’est créée.
         </small>
       </form>
 
@@ -215,7 +218,7 @@ export function LocalPublishForm({ kind, enabled }: Props) {
       {published && (
         <section className="surface local-publish-success" aria-live="polite">
           <h2>{isTrip ? "Trajet enregistré" : "Demande enregistrée"}</h2>
-          <p>Cette annonce de démonstration ne confirme ni réservation ni transport.</p>
+          <p>Votre annonce est enregistrée et visible publiquement. Elle ne confirme ni réservation ni transport.</p>
           {trackingCode && <>
             <label htmlFor="created-tracking-code">Code à conserver pour consulter les étapes de suivi</label>
             <input id="created-tracking-code" readOnly value={trackingCode} onFocus={(event) => event.currentTarget.select()}/>
