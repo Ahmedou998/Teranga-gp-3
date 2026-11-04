@@ -108,9 +108,11 @@ render.yaml
 1. Pousser ce dépôt sur GitHub.
 2. Dans Render, choisir **New → Blueprint** et sélectionner le dépôt.
 3. Vérifier les ressources proposées par `render.yaml` et les coûts du plan avant validation.
-4. Renseigner `NEXT_PUBLIC_APP_URL` avec le domaine public HTTPS.
-5. Laisser Render fournir `DATABASE_URL` depuis la base PostgreSQL liée.
-6. Lancer le déploiement et vérifier `/api/health`. Une base vide est initialisée automatiquement au démarrage avec `prisma migrate deploy`.
+4. Laisser Render fournir `DATABASE_URL` depuis la base PostgreSQL liée.
+5. Valider le Blueprint : les migrations s’exécutent au démarrage et les déploiements se déclenchent automatiquement sur les nouveaux commits de la branche liée.
+6. Vérifier `/api/health` : la réponse doit indiquer `status: "ok"` et `database: "connected"`.
+
+Le service web et la base PostgreSQL sont des ressources Render payantes selon les plans déclarés dans `render.yaml`. L’assistant reste désactivé par défaut; pour l’activer, ajouter `OPENAI_API_KEY` dans les variables du service et définir `AI_ASSISTANT_ENABLED=true`.
 
 Pour déclencher manuellement un déploiement depuis GitHub Actions, créer dans les paramètres du service Render un deploy hook, l’enregistrer dans le dépôt GitHub sous **Settings → Secrets and variables → Actions** avec le nom `RENDER_DEPLOY_HOOK`, puis lancer **Actions → Deploy to Render → Run workflow**. Ne jamais publier ni transmettre l’URL du hook.
 
