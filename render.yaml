@@ -2,14 +2,14 @@ databases:
   - name: teranga-gp-db
     databaseName: teranga_gp
     user: teranga_gp
-    plan: basic-256mb
+    plan: free
     region: frankfurt
 
 services:
   - type: web
     name: teranga-gp
     runtime: node
-    plan: starter
+    plan: free
     region: frankfurt
     autoDeploy: true
     buildCommand: npm ci && npm run build
