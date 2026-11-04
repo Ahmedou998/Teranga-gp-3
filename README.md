@@ -109,7 +109,7 @@ render.yaml
 2. Dans Render, choisir **New → Blueprint** et sélectionner le dépôt.
 3. Vérifier que les deux ressources proposées par `render.yaml` utilisent le plan **Free** avant validation.
 4. Laisser Render fournir `DATABASE_URL` depuis la base PostgreSQL liée.
-5. Valider le Blueprint : les migrations s’exécutent au démarrage et les déploiements se déclenchent automatiquement sur les nouveaux commits de la branche liée.
+5. Valider le Blueprint : l’installation conserve aussi les dépendances de développement nécessaires à Prisma; les migrations s’exécutent au démarrage et les déploiements se déclenchent automatiquement sur les nouveaux commits de la branche liée.
 6. Vérifier `/api/health` : la réponse doit indiquer `status: "ok"` et `database: "connected"`.
 
 Le service web et la base PostgreSQL utilisent le plan gratuit Render. Le service web se met en veille après 15 minutes sans trafic et son prochain démarrage peut prendre environ une minute; il est aussi soumis au quota mensuel d'heures gratuites du workspace. La base PostgreSQL gratuite est limitée à 1 Go et expire 30 jours après sa création. Après expiration, elle devient inaccessible; Render la supprime après un délai de grâce de 14 jours si elle n'est pas mise à niveau. Ce déploiement convient aux tests et démonstrations, pas à une conservation durable des données ni à la production. L’assistant reste désactivé par défaut; pour l’activer, ajouter `OPENAI_API_KEY` dans les variables du service et définir `AI_ASSISTANT_ENABLED=true` (l'utilisation d'OpenAI peut entraîner des frais).
