@@ -3,13 +3,17 @@ import { NextRequest } from "next/server";
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    user: { upsert: vi.fn() },
-    trip: { create: vi.fn() },
-    shipment: { create: vi.fn() },
+    trip: { findMany: vi.fn(), create: vi.fn() },
+    shipment: { findMany: vi.fn(), create: vi.fn() },
   },
 }));
 
+vi.mock("@/lib/auth", () => ({
+  auth: { api: { getSession: vi.fn() } },
+}));
+
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { POST as createTrip } from "./trips/route";
 import { POST as createShipment } from "./shipments/route";
 
@@ -21,31 +25,47 @@ function request(path: string, body: unknown, origin = "http://localhost:3000") 
   });
 }
 
-describe("local demo creation endpoints", () => {
+describe("authenticated announcement endpoints", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.LOCAL_MVP_ENABLED = "false";
+    vi.mocked(auth.api.getSession).mockResolvedValue(null as never);
   });
 
-  it("keeps trip creation disabled by default", async () => {
+  it("requires an authenticated account to create a trip", async () => {
     const response = await createTrip(request("/api/trips", {}));
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     await expect(response.json()).resolves.toHaveProperty("error");
-    expect(prisma.user.upsert).not.toHaveBeenCalled();
+    expect(prisma.trip.create).not.toHaveBeenCalled();
   });
 
-  it("rejects cross-origin local writes", async () => {
-    process.env.LOCAL_MVP_ENABLED = "true";
-    const response = await createShipment(request("/api/shipments", {}, "http://example.com"));
+  it("requires an authenticated account to create a shipment", async () => {
+    const response = await createShipment(request("/api/shipments", {}));
 
-    expect(response.status).toBe(403);
-    expect(prisma.user.upsert).not.toHaveBeenCalled();
+    expect(response.status).toBe(401);
+    expect(prisma.shipment.create).not.toHaveBeenCalled();
   });
 
-  it("creates a local trip with a server-controlled demo user", async () => {
-    process.env.LOCAL_MVP_ENABLED = "true";
-    vi.mocked(prisma.user.upsert).mockResolvedValue({ id: "local-user" } as never);
+  it("rejects sessions with an unverified email", async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValue({
+      user: { id: "account-user", emailVerified: false },
+    } as never);
+    const response = await createTrip(request("/api/trips", {
+      origin: "Dakar, Sénégal",
+      destination: "Paris, France",
+      departureAt: "2030-01-01T10:00:00Z",
+      availableWeightKg: 4,
+      pricePerKgXof: 1500,
+    }));
+
+    expect(response.status).toBe(401);
+    expect(prisma.trip.create).not.toHaveBeenCalled();
+  });
+
+  it("creates a trip owned by the authenticated user", async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValue({
+      user: { id: "account-user", emailVerified: true },
+    } as never);
     vi.mocked(prisma.trip.create).mockResolvedValue({
       id: "trip-1",
       origin: "Dakar, Sénégal",
@@ -66,14 +86,15 @@ describe("local demo creation endpoints", () => {
 
     expect(response.status).toBe(201);
     expect(prisma.trip.create).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ travelerId: "local-user" }),
+      data: expect.objectContaining({ travelerId: "account-user" }),
     }));
     await expect(response.json()).resolves.toMatchObject({ data: { id: "trip-1" } });
   });
 
-  it("creates a shipment with a private tracking code and initial event", async () => {
-    process.env.LOCAL_MVP_ENABLED = "true";
-    vi.mocked(prisma.user.upsert).mockResolvedValue({ id: "local-user" } as never);
+  it("creates a shipment owned by the authenticated user", async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValue({
+      user: { id: "account-user", emailVerified: true },
+    } as never);
     vi.mocked(prisma.shipment.create).mockResolvedValue({
       id: "shipment-1",
       origin: "Dakar, Sénégal",
@@ -93,7 +114,7 @@ describe("local demo creation endpoints", () => {
     expect(response.status).toBe(201);
     expect(prisma.shipment.create).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({
-        senderId: "local-user",
+        senderId: "account-user",
         trackingEvents: { create: expect.objectContaining({ status: "SEARCHING" }) },
       }),
     }));
@@ -103,10 +124,12 @@ describe("local demo creation endpoints", () => {
   });
 
   it("rejects invalid trip input without writing", async () => {
-    process.env.LOCAL_MVP_ENABLED = "true";
+    vi.mocked(auth.api.getSession).mockResolvedValue({
+      user: { id: "account-user", emailVerified: true },
+    } as never);
     const response = await createTrip(request("/api/trips", { origin: "Dakar" }));
 
     expect(response.status).toBe(400);
-    expect(prisma.user.upsert).not.toHaveBeenCalled();
+    expect(prisma.trip.create).not.toHaveBeenCalled();
   });
 });
